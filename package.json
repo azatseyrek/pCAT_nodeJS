@@ -1,0 +1,28 @@
+{
+  "name": "pcat",
+  "version": "1.0.0",
+  "description": "pcat photo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azatseyrek/pCAT_nodeJS.git"
+  },
+  "keywords": [
+    "photo",
+    "app",
+    "camera"
+  ],
+  "author": "Azat Seyrek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azatseyrek/pCAT_nodeJS/issues"
+  },
+  "homepage": "https://github.com/azatseyrek/pCAT_nodeJS#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
