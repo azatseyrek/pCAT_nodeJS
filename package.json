@@ -24,6 +24,7 @@
   "homepage": "https://github.com/azatseyrek/pCAT_nodeJS#readme",
   "dependencies": {
     "ejs": "^3.1.6",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "mongoose": "^6.1.2"
   }
 }
