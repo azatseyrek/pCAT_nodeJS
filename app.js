@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fileUpload = require("express-fileupload");
+const methodOverride = require("method-override");
 const ejs = require("ejs");
 const Photo = require("./models/Photo");
 const mongoose = require("mongoose");
@@ -32,6 +33,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload()); //express-fileupload ten gele midleware
+app.use(methodOverride("_method")); // tarayicilar put islemini desteklemediginden bunu post request olarak gostermek icin method override kullaniyoruz
 
 // -----------------------------------------------------------------
 
@@ -39,7 +41,7 @@ app.use(fileUpload()); //express-fileupload ten gele midleware
 app.get("/", async (req, res) => {
   // res.sendFile(path.resolve(__dirname, "temp/index.html"));
   //EJS kullandigimiz icin artik render kullanmamiz gerekecek!!! ONEMLI
-  const photos = await Photo.find().sort('-dateCreated') //dateCreated in basina eksi koyduk son yuklenen basa gelmesi icin onemli nokta
+  const photos = await Photo.find().sort("-dateCreated"); //dateCreated in basina eksi koyduk son yuklenen basa gelmesi icin onemli nokta
   res.render("index", {
     photos: photos,
   });
@@ -83,6 +85,26 @@ app.post("/photos", async (req, res) => {
     res.redirect("/");
   });
 });
+
+app.get("/photos/edit/:id", async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  res.render("edit", {
+    photo,
+  });
+});
+
+
+app.put("/photos/:id", async (req, res) => {
+  const photo = await Photo.findOne({id: req.params.id})
+  photo.title = req.body.title
+  photo.description = req.body.description
+  photo.save()
+  
+
+  res.redirect(`/photos/${req.params.id}`)
+});
+
+
 
 const port = 3000;
 app.listen(port, () => {
