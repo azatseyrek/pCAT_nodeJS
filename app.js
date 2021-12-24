@@ -33,7 +33,11 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload()); //express-fileupload ten gele midleware
-app.use(methodOverride("_method")); // tarayicilar put islemini desteklemediginden bunu post request olarak gostermek icin method override kullaniyoruz
+app.use(
+  methodOverride("_method", {
+    methods: ["POST", "GET"],
+  })
+); // tarayicilar put islemini desteklemediginden bunu post request olarak gostermek icin method override kullaniyoruz
 
 // -----------------------------------------------------------------
 
@@ -93,18 +97,23 @@ app.get("/photos/edit/:id", async (req, res) => {
   });
 });
 
-
 app.put("/photos/:id", async (req, res) => {
-  const photo = await Photo.findOne({id: req.params.id})
-  photo.title = req.body.title
-  photo.description = req.body.description
-  photo.save()
-  
+  const photo = await Photo.findOne({ id: req.params.id });
+  photo.title = req.body.title;
+  photo.description = req.body.description;
+  photo.save();
 
-  res.redirect(`/photos/${req.params.id}`)
+  res.redirect(`/photos/${req.params.id}`);
 });
 
-
+app.delete("/photos/:id", async (req, res) => {
+  // console.log(req.params.id);
+  const photo = await Photo.findOne({ _id: req.params.id });
+  let deleteImage = __dirname + "/public" + photo.image;
+  fs.unlinkSync(deleteImage);
+  await Photo.findByIdAndRemove(req.params.id);
+  res.redirect("/");
+});
 
 const port = 3000;
 app.listen(port, () => {
